@@ -1,0 +1,10 @@
+{
+  "name": "dna",
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {},
+  "scripts": {},
+  "devDependencies": {
+    "prettier": "^2.0.4"
+  }
+}

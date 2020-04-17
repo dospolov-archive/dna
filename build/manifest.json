@@ -1,0 +1,26 @@
+{
+  "description": "Custom JS and CSS",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "name": "dna",
+  "short_name": "dna",
+  "author": "dospolov",
+  "icons": {
+    "16": "dna-256.png",
+    "19": "dna-256.png",
+    "32": "dna-256.png",
+    "38": "dna-256.png",
+    "48": "dna-256.png",
+    "128": "dna-256.png",
+    "256": "dna-256.png"
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": ["run.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://*.googleapis.com; object-src 'self'",
+  "permissions": ["storage", "http://*/", "https://*/", "tabs"]
+}
