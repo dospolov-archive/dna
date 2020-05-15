@@ -17,10 +17,36 @@
   "content_scripts": [
     {
       "all_frames": true,
+      "matches": ["*://*.youtu.be/*", "*://*.youtube.com/*"],
+      "js": ["snippets/youtube.js"]
+    },
+    {
+      "all_frames": true,
+      "matches": ["*://*.fb.com/*", "*://*.facebook.com/*"],
+      "js": ["snippets/fb.js"]
+    },
+    {
+      "all_frames": true,
+      "matches": ["*://*.amalgama-lab.com/*"],
+      "js": ["snippets/amalgama.js"]
+    },
+    {
+      "all_frames": true,
+      "matches": ["*://*.aliexpress.ru/*"],
+      "js": ["snippets/aliexpress.js"]
+    },
+    {
+      "all_frames": true,
+      "matches": ["*://*.wikipedia.org/*"],
+      "js": ["snippets/wikipedia.js"]
+    },
+    {
+      "all_frames": true,
       "js": ["run.js"],
       "matches": ["<all_urls>"]
     }
   ],
+  "incognito": "split",
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://*.googleapis.com; object-src 'self'",
   "permissions": ["storage", "http://*/", "https://*/", "tabs"]
 }

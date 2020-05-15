@@ -1,25 +1,5 @@
-const rules = [
-  {
-    domains: ['yotu.be', 'youtube.com'],
-    css: `
-      .ytp-ce-covering-overlay,
-      .ytp-ce-element-shadow,
-      .ytp-ce-covering-image,
-      .ytp-ce-expanding-image,
-      .ytp-ce-element.ytp-ce-channel.ytp-ce-channel-this.ytp-ce-element-show.ytp-ce-bottom-right-quad.ytp-ce-size-640,
-      .ytp-ce-element.ytp-ce-video.ytp-ce-element-show,
-      .ytp-ce-element,
-      .ytp-cards-teaser,
-      .ytp-pause-overlay,
-      .yt-view-count-renderer.style-scope.view-count,
-      .ytp-fullerscreen-edu-button,
-      #items .ytd-mini-guide-renderer:nth-child(2) { display: none; }
-    `,
-    js: () => {}
-  }
-]
+const addImportant = styles => styles.replace(/;/g, ' !important;')
 
-const match = domains => domains.some(domain => window.location.hostname.includes(domain))
 const addStyles = styles => {
   const styleSheet = document.createElement('style')
   styleSheet.type = 'text/css'
@@ -27,9 +7,62 @@ const addStyles = styles => {
   document.head.appendChild(styleSheet)
 }
 
-rules.map(rule => {
-  if (match(rule.domains)) {
-    rule.js?.()
-    rule.css && addStyles(rule.css)
+if (window.dna) {
+  try {
+    window.dna.map(snippet => {
+      console.log(`dna snippet applied: ${snippet.name}`)
+      snippet.js?.(createElementReadyFn())
+      snippet.css && addStyles(addImportant(snippet.css))
+    })
+  } catch (e) {
+    alert(e)
   }
-})
+}
+
+function createElementReadyFn() {
+  var listeners = [],
+    doc = window.document,
+    MutationObserver = window.MutationObserver || window.WebKitMutationObserver,
+    observer
+
+  function ready(selector, fn) {
+    // Store the selector and callback to be monitored
+    listeners.push({
+      selector: selector,
+      fn: fn
+    })
+    if (!observer) {
+      // Watch for changes in the document
+      observer = new MutationObserver(check)
+      observer.observe(doc.documentElement, {
+        childList: true,
+        subtree: true
+      })
+    }
+    // Check if the element is currently in the DOM
+    check()
+  }
+
+  function check() {
+    // Check the DOM for elements matching a stored selector
+    for (var i = 0, len = listeners.length, listener, elements; i < len; i++) {
+      listener = listeners[i]
+      // Query for elements matching the specified selector
+      elements = doc.querySelectorAll(listener.selector)
+      for (var j = 0, jLen = elements.length, element; j < jLen; j++) {
+        element = elements[j]
+        // Make sure the callback isn't invoked with the
+        // same element more than once
+        if (!element.ready) {
+          element.ready = true
+          // Invoke the callback with the element
+          listener.fn.call(element, element)
+        }
+      }
+    }
+  }
+
+  // Expose `ready`
+
+  return ready
+}
